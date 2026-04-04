@@ -67,13 +67,19 @@ pipeline {
                   -p $STAGING_PORT:5000 \
                   $IMAGE_NAME:staging
 
-                echo "Waiting for app..."
+                echo "Waiting for app to start..."
+                sleep 5
 
-                for i in {1..20}; do
-                  if curl -sf http://localhost:$STAGING_PORT/health | grep -q ok; then
+                for i in {1..30}; do
+                  RESPONSE=$(curl -s http://localhost:$STAGING_PORT/health || true)
+
+                  echo "Attempt $i: $RESPONSE"
+
+                  if echo "$RESPONSE" | grep -q ok; then
                     echo "Health check passed"
                     exit 0
                   fi
+
                   sleep 2
                 done
 
