@@ -5,6 +5,9 @@ pipeline {
         IMAGE_NAME = "aceest-fitness-api"
         IMAGE_TAG = "jenkins"
         STAGING_NAME = "aceest-staging-jenkins"
+
+        // ✅ FIX: Add Python path
+        PYTHONPATH = "."
     }
 
     options {
@@ -26,6 +29,9 @@ pipeline {
                 . venv/bin/activate
                 pip install --upgrade pip
                 pip install -r requirements.txt
+
+                # ✅ Ensure test dependencies
+                pip install pytest pytest-html pytest-cov allure-pytest
                 '''
             }
         }
@@ -37,10 +43,12 @@ pipeline {
 
                 mkdir -p test-results allure-results
 
-                pytest tests/ -v --tb=short \
+                # ✅ FIX: PYTHONPATH added
+                PYTHONPATH=. pytest tests/ -v --tb=short \
                   --junitxml=test-results/junit.xml \
                   --alluredir=allure-results \
-                  --html=test-results/pytest-report.html --self-contained-html
+                  --html=test-results/pytest-report.html --self-contained-html \
+                  --cov=app
 
                 PYEXIT=$?
 

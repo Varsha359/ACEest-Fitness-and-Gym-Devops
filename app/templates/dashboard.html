@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ACEest Dashboard</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar {
+            background: #2c3e50;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 20px;
+        }
+
+        .container {
+            width: 80%;
+            margin: 30px auto;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 2px 6px rgba(0,0,0,0.1);
+        }
+
+        input, select, button {
+            padding: 10px;
+            margin: 8px 5px 8px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            background: #3498db;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #2980b9;
+        }
+
+        .clients {
+            margin-top: 10px;
+        }
+
+        .client-item {
+            background: #ecf0f1;
+            padding: 8px;
+            margin: 5px 0;
+            border-radius: 5px;
+        }
+
+        img {
+            max-width: 100%;
+            margin-top: 15px;
+        }
+
+        .logout {
+            float: right;
+            margin-top: -35px;
+            margin-right: 20px;
+        }
+
+        .logout a {
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="navbar">
+    ACEest Fitness Dashboard
+    <div class="logout">
+        <a href="/logout">Logout</a>
+    </div>
+</div>
+
+<div class="container">
+
+    <!-- ✅ Client Actions -->
+    <div class="card">
+        <h3>Client Actions</h3>
+
+        <form method="POST">
+            <input type="text" name="name" placeholder="Enter Client Name" required>
+
+            <input type="number" name="adherence" placeholder="Adherence %" min="0" max="100">
+
+            <br>
+
+            <button type="submit" name="action" value="add">Add Client</button>
+            <button type="submit" name="action" value="progress">Add Progress</button>
+            <button type="submit" name="action" value="chart">Show Chart</button>
+            <button type="submit" name="action" value="pdf">Download PDF</button>
+        </form>
+    </div>
+
+    <!-- ✅ Client List -->
+    <div class="card">
+        <h3>Clients</h3>
+
+        <div class="clients">
+            {% for client in clients %}
+                <div class="client-item">
+                    {{ client }}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- ✅ Chart Section -->
+    <div class="card">
+        <h3>Progress Chart</h3>
+
+        {% if chart %}
+            <img src="data:image/png;base64,{{ chart }}" alt="Chart">
+        {% else %}
+            <p>No chart available. Generate one.</p>
+        {% endif %}
+    </div>
+
+</div>
+
+</body>
+</html>

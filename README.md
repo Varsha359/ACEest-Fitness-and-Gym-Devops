@@ -1,125 +1,306 @@
-# ACEest Fitness & Gym Management App (Version 1.0)
+# 🏋️ ACEest Fitness & Gym - Full Stack DevOps System
 
-## 📌 Overview
+![Build Status](https://github.com/Varsha359/ACEest-Fitness-and-Gym-Devops/actions/workflows/main.yml/badge.svg)
+![Coverage](https://img.shields.io/badge/coverage-90%25-brightgreen)
 
-This project is a foundational web application built using Flask.
-It is developed as part of a DevOps/Software Engineering assignment.
-
-The application allows users to select a fitness program and view:
-
-* Weekly workout plan
-* Daily diet plan
-
-This version focuses on migrating a desktop-based Tkinter application into a web-based architecture.
+> A production-ready fitness management platform built with Flask, featuring analytics, authentication, and a complete CI/CD pipeline with Docker and GitHub Actions.
 
 ---
 
-## 🚀 Features (Version 1.0)
+## 📋 Table of Contents
 
-* Program selection (Fat Loss, Muscle Gain, Beginner)
-* Display workout plan
-* Display diet plan
-* Simple web interface using HTML
-* Backend powered by Flask
+* [Project Overview](#-project-overview)
+* [Architecture](#-architecture)
+* [Features](#-features)
+* [Tech Stack](#-tech-stack)
+* [Local Development Setup](#-local-development-setup)
+* [Running the Application](#-running-the-application)
+* [Docker Deployment](#-docker-deployment)
+* [CI/CD Pipeline](#-cicd-pipeline)
+* [Git Workflow](#-git-workflow)
+* [Rollback Strategy](#-rollback-strategy)
+* [Troubleshooting](#-troubleshooting)
+* [Future Enhancements](#-future-enhancements)
+
+---
+
+## 🎯 Project Overview
+
+**ACEest Fitness System** is a full-stack fitness management platform that evolved across multiple versions, demonstrating real-world software engineering and DevOps practices.
+
+This project showcases:
+
+* ✅ End-to-end application development (UI + backend)
+* ✅ Progressive feature evolution (v1 → v3)
+* ✅ Database-driven architecture
+* ✅ Analytics and visualization
+* ✅ CI/CD automation with GitHub Actions
+* ✅ Containerized deployment using Docker
+* ✅ Version control with rollback capability
 
 ---
 
 ## 🏗️ Architecture
 
-Frontend:
+### System Flow
 
-* HTML (Jinja templates)
-* Basic CSS
-
-Backend:
-
-* Flask (Python)
-
-Flow:
-User → HTML Form → Flask Route → Service Logic → HTML Response
+```
+User → Flask Web App → Services Layer → SQLite DB
+                      ↓
+                 Matplotlib (Charts)
+                      ↓
+                 HTML UI (Jinja)
+```
 
 ---
 
-## 📂 Project Structure
+### Project Structure
 
-aceest-fitness/
-│
+```bash
+aceest-devops/
 ├── app/
-│   ├── **init**.py
-│   ├── routes.py
-│   ├── services.py
-│   ├── templates/
-│   └── static/
-│
-├── run.py
+│   ├── __init__.py        # App factory
+│   ├── routes.py          # Routes / Controllers
+│   ├── services.py        # Business logic + DB
+│   ├── templates/         # HTML UI
+│   └── static/            # CSS
+├── tests/                 # Unit tests
+├── run.py                 # Entry point
 ├── requirements.txt
 └── README.md
+```
 
 ---
 
-## ⚙️ Setup Instructions
+## 🚀 Features
 
-1. Clone the repository
+### 🔹 Core Features
+
+* Client management (Add / Load)
+* Calorie calculation based on fitness programs
+* Weekly adherence tracking
+
+### 🔹 Advanced Features
+
+* 📊 Progress analytics (charts using matplotlib)
+* 🗄️ SQLite database persistence
+* 🏋️ Workout tracking
+* 📄 PDF report generation
+* 💳 Membership management
+
+### 🔹 System Features
+
+* 🔐 Login system (Admin access)
+* 🎯 Role-based functionality
+* ⚙️ CI/CD pipeline integration
+* 🐳 Docker containerization
+* 🔁 Version-based rollback strategy
+
+---
+
+## 🛠️ Tech Stack
+
+| Layer            | Technology                   |
+| ---------------- | ---------------------------- |
+| Backend          | Flask (Python)               |
+| Database         | SQLite                       |
+| Frontend         | HTML + CSS (Jinja templates) |
+| Analytics        | Matplotlib (Agg backend)     |
+| PDF              | FPDF                         |
+| CI/CD            | GitHub Actions               |
+| Containerization | Docker                       |
+
+---
+
+## ⚙️ Local Development Setup
+
+### 1. Clone Repository
 
 ```bash
 git clone https://github.com/Varsha359/ACEest-Fitness-and-Gym-Devops.git
 cd ACEest-Fitness-and-Gym-Devops
 ```
 
-2. Create virtual environment
+---
+
+### 2. Setup Virtual Environment
 
 ```bash
 python -m venv venv
-source venv/bin/activate   # Mac/Linux
+source venv/bin/activate   # macOS/Linux
 venv\Scripts\activate      # Windows
 ```
 
-3. Install dependencies
+---
+
+### 3. Install Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-4. Run the application
+---
+
+## ▶️ Running the Application
 
 ```bash
 python run.py
 ```
 
-5. Open in browser
+Open in browser:
 
 ```
-http://127.0.0.1:5000
+http://localhost:5000
 ```
 
 ---
 
-## 🔄 Version History
+## 🔐 Login Credentials
 
-### v1.0
-
-* Migrated Tkinter-based application to Flask
-* Implemented program selection feature
-* Displayed workout and diet plans using web interface
-* No database integration (basic version)
+```text
+Username: admin
+Password: admin
+```
 
 ---
 
-## 🎯 Future Enhancements
+## 🐳 Docker Deployment
 
-* Add database integration
-* User authentication (login/register)
-* REST API endpoints
-* Improved UI/UX
-* Deployment using Docker and CI/CD
+### Build Image
+
+```bash
+docker build -t aceest-fitness:v3.2.4 .
+```
+
+---
+
+### Run Container
+
+```bash
+docker run -p 5000:5000 aceest-fitness:v3.2.4
+```
 
 ---
 
-## 🧠 Key Learning
+## ⚙️ CI/CD Pipeline
 
-* Migration from desktop GUI (Tkinter) to web architecture
-* Flask application structure
-* Separation of concerns (routes, services, templates)
-* Version control and commit strategy
+Implemented using **GitHub Actions**:
+
+### Pipeline Stages:
+
+* ✅ Install dependencies
+* ✅ Run tests (pytest)
+* ✅ Generate reports
+* ✅ Build Docker image
+* ✅ Tag versioned images
 
 ---
+
+### Trigger Pipeline
+
+```bash
+git tag v3.2.4
+git push origin v3.2.4
+```
+
+---
+
+## 🔁 Rollback Strategy
+
+Each version is tagged and stored as a Docker image:
+
+```bash
+aceest-fitness:v1.0
+aceest-fitness:v2.2.1
+aceest-fitness:v3.2.4
+```
+
+### Rollback Example
+
+```bash
+docker run aceest-fitness:v2.2.1
+```
+
+---
+
+## 🌿 Git Workflow
+
+```bash
+feature → develop → main → tag release
+```
+
+### Example
+
+```bash
+git checkout -b feature/v3-final
+git commit -m "feat: add analytics and dashboard"
+git push origin feature/v3-final
+```
+
+---
+
+## 🐛 Troubleshooting
+
+### Port already in use
+
+```bash
+lsof -i :5000
+kill -9 <PID>
+```
+
+---
+
+### Docker issues
+
+```bash
+docker system prune -a
+```
+
+---
+
+### Matplotlib error (Mac fix)
+
+```python
+import matplotlib
+matplotlib.use('Agg')
+```
+
+---
+
+## 🚀 Future Enhancements
+
+* REST APIs for frontend/mobile
+* Deployment on AWS / Render
+* Role-based dashboards (Trainer / Client)
+* Real-time analytics
+* Notification system
+
+---
+
+## 🧠 Key Learnings
+
+* Full-stack system design
+* DevOps lifecycle implementation
+* CI/CD pipeline automation
+* Containerized deployments
+* Versioning & rollback strategies
+
+---
+
+## 👩‍💻 Author
+
+**Varsha Gajula**
+MTech Software Engineering
+Backend + DevOps Enthusiast
+2024tm93599
+
+---
+
+## ⭐ Final Note
+
+This project demonstrates **industry-level practices** including:
+
+* Scalable architecture
+* Clean code separation
+* Automated pipelines
+* Real-world deployment strategies
