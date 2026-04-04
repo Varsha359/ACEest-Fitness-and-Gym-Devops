@@ -1,19 +1,47 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>ACEest Fitness</title>
+    <title>ACEest Fitness v1.1</title>
+    <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-    <h1>Select Your Fitness Program</h1>
 
-    <form method="POST">
-        <select name="program">
-            {% for p in programs %}
-                <option value="{{ p }}">{{ p }}</option>
-            {% endfor %}
-        </select>
+<h1>ACEest Functional Fitness System</h1>
 
-        <button type="submit">View Plan</button>
-    </form>
+<form method="POST">
+    <input type="text" name="name" placeholder="Name" required>
+    <input type="number" name="age" placeholder="Age" required>
+    <input type="number" step="0.1" name="weight" placeholder="Weight (kg)" required>
+
+    <select name="program">
+        {% for program in programs %}
+        <option value="{{program}}">{{program}}</option>
+        {% endfor %}
+    </select>
+
+    <label>Weekly Adherence (%)</label>
+    <input type="range" name="adherence" min="0" max="100">
+
+    <button type="submit">Generate Plan</button>
+</form>
+
+{% if result %}
+<div class="card">
+    <h2>Client Summary</h2>
+    <p><strong>Name:</strong> {{result.name}}</p>
+    <p><strong>Age:</strong> {{result.age}}</p>
+    <p><strong>Weight:</strong> {{result.weight}} kg</p>
+    <p><strong>Program:</strong> {{result.program}}</p>
+    <p><strong>Calories:</strong> {{result.calories}}</p>
+    <p><strong>Adherence:</strong> {{result.adherence}}%</p>
+
+    <h3>Workout Plan</h3>
+    <p>{{result.workout}}</p>
+
+    <h3>Diet Plan</h3>
+    <p>{{result.diet}}</p>
+</div>
+{% endif %}
+
 </body>
 </html>
