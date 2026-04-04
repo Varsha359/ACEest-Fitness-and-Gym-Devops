@@ -16,7 +16,7 @@ pipeline {
         }
 
         stage('Run Container') {
-           git  steps {
+            steps {
                 sh '''
                 docker stop aceest-container || true
                 docker rm aceest-container || true
