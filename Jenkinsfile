@@ -64,16 +64,15 @@ pipeline {
 
                 docker run -d \
                 --name $STAGING_NAME \
-                -p $STAGING_PORT:5000 \
                 $IMAGE_NAME:staging
 
-                echo "Waiting for app to start..."
+                echo "Waiting for app..."
                 sleep 5
 
                 i=1
                 while [ $i -le 30 ]
                 do
-                RESPONSE=$(curl -s http://localhost:$STAGING_PORT/health || true)
+                RESPONSE=$(docker exec $STAGING_NAME curl -s http://localhost:5000/health || true)
 
                 echo "Attempt $i: $RESPONSE"
 
@@ -90,8 +89,8 @@ pipeline {
                 docker logs $STAGING_NAME
                 exit 1
                 '''
-    }
-}
+            }
+        }
     }
 
     post {
