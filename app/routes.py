@@ -3,7 +3,8 @@ from app.services import (
     calculate_calories,
     save_client,
     get_client,
-    save_progress
+    save_progress,
+    generate_chart
 )
 
 main_bp = Blueprint("main", __name__)
@@ -22,6 +23,7 @@ def health():
 def index():
     result = None
     message = None
+    chart = None
 
     if request.method == "POST":
         action = request.form.get("action")
@@ -57,9 +59,16 @@ def index():
             save_progress(name, adherence)
             message = "Progress saved"
 
+        elif action == "chart":
+            chart = generate_chart(name)
+
+            if not chart:
+                message = "No progress data available"
+
     return render_template(
         "index.html",
         programs=PROGRAMS,
         result=result,
-        message=message
+        message=message,
+        chart=chart
     )

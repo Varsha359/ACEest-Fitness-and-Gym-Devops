@@ -1,5 +1,11 @@
 import sqlite3
 from datetime import datetime
+import io
+import base64
+import matplotlib
+matplotlib.use('Agg')  
+import matplotlib.pyplot as plt
+
 
 DB_NAME = "aceest.db"
 
@@ -78,3 +84,43 @@ def save_progress(name, adherence):
 
     conn.commit()
     conn.close()
+
+
+def get_progress_data(name):
+    conn = get_connection()
+    cur = conn.cursor()
+
+    cur.execute("""
+        SELECT week, adherence
+        FROM progress
+        WHERE client_name=?
+        ORDER BY id
+    """, (name,))
+
+    data = cur.fetchall()
+    conn.close()
+    return data
+
+
+def generate_chart(name):
+    data = get_progress_data(name)
+
+    if not data:
+        return None
+
+    weeks = [row[0] for row in data]
+    adherence = [row[1] for row in data]
+
+    plt.figure()
+    plt.plot(weeks, adherence, marker="o")
+    plt.xlabel("Week")
+    plt.ylabel("Adherence (%)")
+    plt.title(f"Progress - {name}")
+    plt.xticks(rotation=45)
+
+    img = io.BytesIO()
+    plt.savefig(img, format="png", bbox_inches="tight")
+    plt.close()
+
+    img.seek(0)
+    return base64.b64encode(img.getvalue()).decode()

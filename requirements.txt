@@ -1,4 +1,4 @@
 Flask==3.0.3
-pytest==8.2.0
+matplotlib
+pytest
 pytest-html
-allure-pytest
