@@ -1,47 +1,55 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>ACEest Fitness v1.1</title>
+    <title>ACEest v1.1.2</title>
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
 
-<h1>ACEest Functional Fitness System</h1>
+<h1>ACEest Fitness Dashboard</h1>
 
 <form method="POST">
-    <input type="text" name="name" placeholder="Name" required>
-    <input type="number" name="age" placeholder="Age" required>
-    <input type="number" step="0.1" name="weight" placeholder="Weight (kg)" required>
+    <input name="name" placeholder="Name" required>
+    <input name="age" placeholder="Age" required>
+    <input name="weight" placeholder="Weight" required>
 
     <select name="program">
-        {% for program in programs %}
-        <option value="{{program}}">{{program}}</option>
+        {% for p in programs %}
+        <option value="{{p}}">{{p}}</option>
         {% endfor %}
     </select>
 
-    <label>Weekly Adherence (%)</label>
     <input type="range" name="adherence" min="0" max="100">
 
-    <button type="submit">Generate Plan</button>
+    <input name="notes" placeholder="Coach Notes">
+
+    <button type="submit">Save Client</button>
 </form>
 
-{% if result %}
-<div class="card">
-    <h2>Client Summary</h2>
-    <p><strong>Name:</strong> {{result.name}}</p>
-    <p><strong>Age:</strong> {{result.age}}</p>
-    <p><strong>Weight:</strong> {{result.weight}} kg</p>
-    <p><strong>Program:</strong> {{result.program}}</p>
-    <p><strong>Calories:</strong> {{result.calories}}</p>
-    <p><strong>Adherence:</strong> {{result.adherence}}%</p>
+<a href="/export">
+    <button>Export CSV</button>
+</a>
 
-    <h3>Workout Plan</h3>
-    <p>{{result.workout}}</p>
+<h2>Clients</h2>
 
-    <h3>Diet Plan</h3>
-    <p>{{result.diet}}</p>
-</div>
-{% endif %}
+<table border="1">
+<tr>
+    <th>Name</th><th>Age</th><th>Weight</th>
+    <th>Program</th><th>Adherence</th><th>Notes</th>
+</tr>
+
+{% for c in clients %}
+<tr>
+    <td>{{c.name}}</td>
+    <td>{{c.age}}</td>
+    <td>{{c.weight}}</td>
+    <td>{{c.program}}</td>
+    <td>{{c.adherence}}</td>
+    <td>{{c.notes}}</td>
+</tr>
+{% endfor %}
+
+</table>
 
 </body>
 </html>
