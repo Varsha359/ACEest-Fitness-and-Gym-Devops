@@ -3,17 +3,11 @@ from .services import programs, get_program_details
 
 main = Blueprint('main', __name__)
 
-# -----------------------------
-# Health Route (ADD THIS)
-# -----------------------------
 @main.route('/health', methods=['GET'])
 def health():
     return jsonify({"status": "ok"}), 200
 
 
-# -----------------------------
-# Existing Home Route
-# -----------------------------
 @main.route('/', methods=['GET', 'POST'])
 def home():
     if request.method == 'POST':
