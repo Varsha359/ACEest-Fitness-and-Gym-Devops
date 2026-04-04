@@ -5,7 +5,10 @@ pipeline {
         IMAGE_NAME = "aceest-fitness-api"
         IMAGE_TAG = "jenkins"
         STAGING_NAME = "aceest-staging-jenkins"
-        STAGING_PORT = "5099"
+    }
+
+    options {
+        timestamps()
     }
 
     stages {
@@ -63,32 +66,30 @@ pipeline {
                 docker rm -f $STAGING_NAME 2>/dev/null || true
 
                 docker run -d \
-                --name $STAGING_NAME \
-                $IMAGE_NAME:staging
+                  --name $STAGING_NAME \
+                  $IMAGE_NAME:staging
 
-                echo "Waiting for app..."
+                echo "Waiting for app to start..."
                 sleep 5
 
                 i=1
                 while [ $i -le 30 ]
                 do
-                RESPONSE=$(docker exec $STAGING_NAME python -c "
-        import urllib.request
-        try:
-            print(urllib.request.urlopen('http://localhost:5000/health').read().decode())
-        except:
-            pass
-        " || true)
+                  RESPONSE=$(docker exec $STAGING_NAME python -c "import urllib.request; import sys; 
+try:
+ print(urllib.request.urlopen('http://localhost:5000/health').read().decode())
+except:
+ sys.exit(0)" || true)
 
-                echo "Attempt $i: $RESPONSE"
+                  echo "Attempt $i: $RESPONSE"
 
-                if echo "$RESPONSE" | grep -q ok; then
+                  if echo "$RESPONSE" | grep -q ok; then
                     echo "Health check passed"
                     exit 0
-                fi
+                  fi
 
-                sleep 2
-                i=$((i+1))
+                  sleep 2
+                  i=$((i+1))
                 done
 
                 echo "Health check failed"
