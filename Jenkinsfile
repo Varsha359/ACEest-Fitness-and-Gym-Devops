@@ -19,8 +19,10 @@ pipeline {
         stage('Install dependencies') {
             steps {
                 sh '''
-                python3 -m pip install --upgrade pip
-                python3 -m pip install -r requirements.txt
+                python3 -m venv venv
+                . venv/bin/activate
+                pip install --upgrade pip
+                pip install -r requirements.txt
                 '''
             }
         }
@@ -28,16 +30,18 @@ pipeline {
         stage('Test') {
             steps {
                 sh '''
+                . venv/bin/activate
+
                 mkdir -p test-results allure-results
 
-                python3 -m pytest tests/ -v --tb=short \
+                pytest tests/ -v --tb=short \
                   --junitxml=test-results/junit.xml \
                   --alluredir=allure-results \
                   --html=test-results/pytest-report.html --self-contained-html
 
                 PYEXIT=$?
 
-                python3 scripts/build_test_dashboard.py || true
+                python scripts/build_test_dashboard.py || true
 
                 exit $PYEXIT
                 '''
@@ -63,7 +67,7 @@ pipeline {
                   -p $STAGING_PORT:5000 \
                   $IMAGE_NAME:staging
 
-                echo "Waiting for app to start..."
+                echo "Waiting for app..."
 
                 for i in {1..20}; do
                   if curl -sf http://localhost:$STAGING_PORT/health | grep -q ok; then
@@ -83,7 +87,7 @@ pipeline {
 
     post {
         always {
-            junit 'test-results/junit.xml'
+            junit testResults: 'test-results/junit.xml', allowEmptyResults: true
             archiveArtifacts artifacts: 'test-results/*.html,allure-results/**/*', allowEmptyArchive: true
         }
     }
