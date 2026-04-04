@@ -1,17 +1,17 @@
-from flask import Blueprint, render_template, request, redirect, url_for, send_file,jsonify
-from app.services import calculate_calories
-import csv
-import io
+from flask import Blueprint, render_template, request, jsonify
+from app.services import (
+    calculate_calories,
+    save_client,
+    get_client,
+    save_progress
+)
 
-main_bp = Blueprint('main', __name__)
-
-# In-memory storage (like tkinter list)
-clients = []
+main_bp = Blueprint("main", __name__)
 
 PROGRAMS = {
-    "Fat Loss (FL)": {"factor": 22, "workout": "Back Squat + Cardio", "diet": "Egg Whites + Chicken"},
-    "Muscle Gain (MG)": {"factor": 35, "workout": "Squat + Bench + Deadlift", "diet": "Eggs + Biryani"},
-    "Beginner (BG)": {"factor": 26, "workout": "Basic Bodyweight", "diet": "Balanced Diet"}
+    "Fat Loss (FL)": 22,
+    "Muscle Gain (MG)": 35,
+    "Beginner (BG)": 26
 }
 
 @main_bp.route('/health', methods=['GET'])
@@ -20,54 +20,42 @@ def health():
 
 @main_bp.route("/", methods=["GET", "POST"])
 def index():
+    result = None
+
     if request.method == "POST":
+        action = request.form.get("action")
+
         name = request.form.get("name")
-        age = request.form.get("age")
-        weight = float(request.form.get("weight"))
-        program = request.form.get("program")
-        adherence = request.form.get("adherence")
-        notes = request.form.get("notes")
 
-        calories = calculate_calories(weight, PROGRAMS[program]["factor"])
+        if action == "save":
+            age = request.form.get("age")
+            weight = float(request.form.get("weight"))
+            program = request.form.get("program")
 
-        client = {
-            "name": name,
-            "age": age,
-            "weight": weight,
-            "program": program,
-            "adherence": adherence,
-            "notes": notes,
-            "calories": calories
-        }
+            calories = calculate_calories(weight, PROGRAMS[program])
 
-        clients.append(client)
+            save_client(name, age, weight, program, calories)
 
-        return redirect(url_for("main.index"))
+            result = {"message": "Client Saved"}
 
-    return render_template("index.html", clients=clients, programs=PROGRAMS)
+        elif action == "load":
+            row = get_client(name)
 
+            if row:
+                _, name, age, weight, program, calories = row
+                result = {
+                    "name": name,
+                    "age": age,
+                    "weight": weight,
+                    "program": program,
+                    "calories": calories
+                }
+            else:
+                result = {"message": "Client Not Found"}
 
-@main_bp.route("/export")
-def export_csv():
-    if not clients:
-        return "No data"
+        elif action == "progress":
+            adherence = request.form.get("adherence")
+            save_progress(name, adherence)
+            result = {"message": "Progress Saved"}
 
-    output = io.StringIO()
-    writer = csv.writer(output)
-
-    writer.writerow(["Name", "Age", "Weight", "Program", "Adherence", "Notes"])
-
-    for c in clients:
-        writer.writerow([
-            c["name"], c["age"], c["weight"],
-            c["program"], c["adherence"], c["notes"]
-        ])
-
-    output.seek(0)
-
-    return send_file(
-        io.BytesIO(output.getvalue().encode()),
-        mimetype="text/csv",
-        as_attachment=True,
-        download_name="clients.csv"
-    )
+    return render_template("index.html", programs=PROGRAMS, result=result)
