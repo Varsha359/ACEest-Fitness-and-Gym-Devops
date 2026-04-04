@@ -1,56 +1,14 @@
 body {
     background: #1a1a1a;
     color: white;
-    font-family: Arial;
-    margin: 0;
     text-align: center;
 }
 
-h1 {
-    color: #d4af37;
-}
-
-.container {
-    display: flex;
-    justify-content: center;
-    gap: 40px;
-    padding: 20px;
-}
-
-.form-section, .result-section {
-    background: #2c2c2c;
-    padding: 20px;
-    border-radius: 10px;
-    width: 320px;
-}
-
-input, select {
-    width: 90%;
+input, select, button {
+    margin: 10px;
     padding: 10px;
-    margin: 10px 0;
-    border: none;
-    border-radius: 5px;
 }
 
 button {
-    background: #d4af37;
-    color: black;
-    padding: 10px;
-    margin: 5px;
-    border: none;
-    cursor: pointer;
-}
-
-button:hover {
-    background: #c39c2d;
-}
-
-.success {
-    color: #00ff99;
-}
-
-.chart-section img {
-    width: 100%;
-    margin-top: 10px;
-    border-radius: 10px;
+    background: gold;
 }

@@ -1,74 +1,59 @@
-from flask import Blueprint, render_template, request, jsonify
-from app.services import (
-    calculate_calories,
-    save_client,
-    get_client,
-    save_progress,
-    generate_chart
-)
+from flask import Blueprint, jsonify, render_template, request, redirect, session, send_file
+from app.services import *
 
 main_bp = Blueprint("main", __name__)
-
-PROGRAMS = {
-    "Fat Loss (FL)": 22,
-    "Muscle Gain (MG)": 35,
-    "Beginner (BG)": 26
-}
 
 @main_bp.route('/health', methods=['GET'])
 def health():
     return jsonify({"status": "ok"}), 200
 
-@main_bp.route("/", methods=["GET", "POST"])
-def index():
-    result = None
-    message = None
+@main_bp.route("/", methods=["GET","POST"])
+def login():
+    if request.method == "POST":
+        user = request.form.get("username")
+        pwd = request.form.get("password")
+
+        role = validate_user(user, pwd)
+        if role:
+            session["user"] = user
+            return redirect("/dashboard")
+
+    return render_template("login.html")
+
+@main_bp.route("/dashboard", methods=["GET","POST"])
+def dashboard():
+    if "user" not in session:
+        return redirect("/")
+
     chart = None
 
     if request.method == "POST":
         action = request.form.get("action")
         name = request.form.get("name")
 
-        if action == "save":
-            age = request.form.get("age")
-            weight = float(request.form.get("weight"))
-            program = request.form.get("program")
+        # ✅ Fix: validate name
+        if not name:
+            return "Error: Name is required"
 
-            calories = calculate_calories(weight, PROGRAMS[program])
-            save_client(name, age, weight, program, calories)
-
-            message = "Client saved successfully"
-
-        elif action == "load":
-            data = get_client(name)
-
-            if data:
-                _, name, age, weight, program, calories = data
-                result = {
-                    "name": name,
-                    "age": age,
-                    "weight": weight,
-                    "program": program,
-                    "calories": calories
-                }
-            else:
-                message = "Client not found"
+        if action == "add":
+            save_client(name)
 
         elif action == "progress":
             adherence = request.form.get("adherence")
             save_progress(name, adherence)
-            message = "Progress saved"
 
         elif action == "chart":
             chart = generate_chart(name)
 
-            if not chart:
-                message = "No progress data available"
+        elif action == "pdf":
+            file = generate_pdf(name)
+            return send_file(file, as_attachment=True)
 
-    return render_template(
-        "index.html",
-        programs=PROGRAMS,
-        result=result,
-        message=message,
-        chart=chart
-    )
+    clients = get_clients()
+
+    return render_template("dashboard.html", clients=clients, chart=chart)
+
+@main_bp.route("/logout")
+def logout():
+    session.clear()
+    return redirect("/")
