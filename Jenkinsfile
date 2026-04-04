@@ -72,7 +72,13 @@ pipeline {
                 i=1
                 while [ $i -le 30 ]
                 do
-                RESPONSE=$(docker exec $STAGING_NAME curl -s http://localhost:5000/health || true)
+                RESPONSE=$(docker exec $STAGING_NAME python -c "
+        import urllib.request
+        try:
+            print(urllib.request.urlopen('http://localhost:5000/health').read().decode())
+        except:
+            pass
+        " || true)
 
                 echo "Attempt $i: $RESPONSE"
 
