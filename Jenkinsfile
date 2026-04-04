@@ -1,44 +1,90 @@
 pipeline {
     agent any
 
+    environment {
+        IMAGE_NAME = "aceest-fitness-api"
+        IMAGE_TAG = "jenkins"
+        STAGING_NAME = "aceest-staging-jenkins"
+        STAGING_PORT = "5099"
+    }
+
     stages {
 
-        stage('Checkout Code') {
+        stage('Checkout') {
             steps {
                 checkout scm
             }
         }
 
-        stage('Install Dependencies') {
+        stage('Install dependencies') {
             steps {
                 sh '''
-                pip3 install -r requirements.txt
+                python3 -m pip install --upgrade pip
+                python3 -m pip install -r requirements.txt
                 '''
             }
         }
 
-        stage('Run Tests (Quality Gate)') {
+        stage('Test') {
             steps {
                 sh '''
-                pytest
+                mkdir -p test-results allure-results
+
+                python3 -m pytest tests/ -v --tb=short \
+                  --junitxml=test-results/junit.xml \
+                  --alluredir=allure-results \
+                  --html=test-results/pytest-report.html --self-contained-html
+
+                PYEXIT=$?
+
+                python3 scripts/build_test_dashboard.py || true
+
+                exit $PYEXIT
                 '''
             }
         }
 
-        stage('Build Docker Image') {
+        stage('Docker Build') {
             steps {
-                sh 'docker build -t aceest-fitness:v1 .'
+                sh '''
+                docker build -t $IMAGE_NAME:$IMAGE_TAG .
+                docker tag $IMAGE_NAME:$IMAGE_TAG $IMAGE_NAME:staging
+                '''
             }
         }
 
-        stage('Deploy Container') {
+        stage('Staging Deploy + Health Check') {
             steps {
                 sh '''
-                docker stop aceest-container || true
-                docker rm aceest-container || true
-                docker run -d -p 5000:5000 --name aceest-container aceest-fitness:v1
+                docker rm -f $STAGING_NAME 2>/dev/null || true
+
+                docker run -d \
+                  --name $STAGING_NAME \
+                  -p $STAGING_PORT:5000 \
+                  $IMAGE_NAME:staging
+
+                echo "Waiting for app to start..."
+
+                for i in {1..20}; do
+                  if curl -sf http://localhost:$STAGING_PORT/health | grep -q ok; then
+                    echo "Health check passed"
+                    exit 0
+                  fi
+                  sleep 2
+                done
+
+                echo "Health check failed"
+                docker logs $STAGING_NAME
+                exit 1
                 '''
             }
+        }
+    }
+
+    post {
+        always {
+            junit 'test-results/junit.xml'
+            archiveArtifacts artifacts: 'test-results/*.html,allure-results/**/*', allowEmptyArchive: true
         }
     }
 }
