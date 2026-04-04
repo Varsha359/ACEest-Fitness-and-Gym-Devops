@@ -1,38 +1,39 @@
 pipeline {
-    agent any
+    agent none
 
     stages {
 
         stage('Checkout Code') {
+            agent any
             steps {
                 checkout scm
             }
         }
 
-        stage('Install Dependencies') {
-            steps {
-                sh '''
-                pip3 install --upgrade pip
-                pip3 install -r requirements.txt
-                '''
+        stage('Install Dependencies & Run Tests') {
+            agent {
+                docker {
+                    image 'python:3.10-slim'
+                }
             }
-        }
-
-        stage('Run Tests (Quality Gate)') {
             steps {
                 sh '''
+                pip install --upgrade pip
+                pip install -r requirements.txt
                 pytest
                 '''
             }
         }
 
         stage('Build Docker Image') {
+            agent any
             steps {
                 sh 'docker build -t aceest-fitness:v1 .'
             }
         }
 
         stage('Deploy Container') {
+            agent any
             steps {
                 sh '''
                 docker stop aceest-container || true
