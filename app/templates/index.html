@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>ACEest v2.1.2</title>
+    <title>ACEest v2.2.1</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
 <h1>ACEest Functional Fitness</h1>
-<h3>Version: v2.1.2</h3>
+<h3>Version: v2.2.1</h3>
 
 <div class="container">
 
@@ -34,12 +34,13 @@
                 <button name="action" value="save">Save</button>
                 <button name="action" value="load">Load</button>
                 <button name="action" value="progress">Save Progress</button>
+                <button name="action" value="chart">View Chart</button>
             </div>
 
         </form>
     </div>
 
-    <!-- OUTPUT -->
+    <!-- RESULT -->
     <div class="result-section">
 
         {% if message %}
@@ -53,6 +54,13 @@
             <p><b>Weight:</b> {{result.weight}}</p>
             <p><b>Program:</b> {{result.program}}</p>
             <p><b>Calories:</b> {{result.calories}}</p>
+        {% endif %}
+
+        {% if chart %}
+            <div class="chart-section">
+                <h2>Progress Chart</h2>
+                <img src="data:image/png;base64,{{chart}}">
+            </div>
         {% endif %}
 
     </div>
