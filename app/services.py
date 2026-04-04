@@ -3,6 +3,7 @@ from datetime import datetime
 
 DB_NAME = "aceest.db"
 
+
 def get_connection():
     return sqlite3.connect(DB_NAME)
 
@@ -58,10 +59,10 @@ def get_client(name):
     cur = conn.cursor()
 
     cur.execute("SELECT * FROM clients WHERE name=?", (name,))
-    row = cur.fetchone()
+    result = cur.fetchone()
 
     conn.close()
-    return row
+    return result
 
 
 def save_progress(name, adherence):
