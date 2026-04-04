@@ -63,32 +63,35 @@ pipeline {
                 docker rm -f $STAGING_NAME 2>/dev/null || true
 
                 docker run -d \
-                  --name $STAGING_NAME \
-                  -p $STAGING_PORT:5000 \
-                  $IMAGE_NAME:staging
+                --name $STAGING_NAME \
+                -p $STAGING_PORT:5000 \
+                $IMAGE_NAME:staging
 
                 echo "Waiting for app to start..."
                 sleep 5
 
-                for i in {1..30}; do
-                  RESPONSE=$(curl -s http://localhost:$STAGING_PORT/health || true)
+                i=1
+                while [ $i -le 30 ]
+                do
+                RESPONSE=$(curl -s http://localhost:$STAGING_PORT/health || true)
 
-                  echo "Attempt $i: $RESPONSE"
+                echo "Attempt $i: $RESPONSE"
 
-                  if echo "$RESPONSE" | grep -q ok; then
+                if echo "$RESPONSE" | grep -q ok; then
                     echo "Health check passed"
                     exit 0
-                  fi
+                fi
 
-                  sleep 2
+                sleep 2
+                i=$((i+1))
                 done
 
                 echo "Health check failed"
                 docker logs $STAGING_NAME
                 exit 1
                 '''
-            }
-        }
+    }
+}
     }
 
     post {
