@@ -21,10 +21,10 @@ def health():
 @main_bp.route("/", methods=["GET", "POST"])
 def index():
     result = None
+    message = None
 
     if request.method == "POST":
         action = request.form.get("action")
-
         name = request.form.get("name")
 
         if action == "save":
@@ -33,16 +33,15 @@ def index():
             program = request.form.get("program")
 
             calories = calculate_calories(weight, PROGRAMS[program])
-
             save_client(name, age, weight, program, calories)
 
-            result = {"message": "Client Saved"}
+            message = "Client saved successfully"
 
         elif action == "load":
-            row = get_client(name)
+            data = get_client(name)
 
-            if row:
-                _, name, age, weight, program, calories = row
+            if data:
+                _, name, age, weight, program, calories = data
                 result = {
                     "name": name,
                     "age": age,
@@ -51,11 +50,16 @@ def index():
                     "calories": calories
                 }
             else:
-                result = {"message": "Client Not Found"}
+                message = "Client not found"
 
         elif action == "progress":
             adherence = request.form.get("adherence")
             save_progress(name, adherence)
-            result = {"message": "Progress Saved"}
+            message = "Progress saved"
 
-    return render_template("index.html", programs=PROGRAMS, result=result)
+    return render_template(
+        "index.html",
+        programs=PROGRAMS,
+        result=result,
+        message=message
+    )

@@ -1,62 +1,63 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>ACEest Fitness v2</title>
+    <title>ACEest v2.1.2</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
-    <h1>ACEest Functional Fitness System</h1>
-    <h3>Version: v2.0.1</h3>
+<h1>ACEest Functional Fitness</h1>
+<h3>Version: v2.1.2</h3>
 
-    <div class="container">
+<div class="container">
 
-        <!-- FORM SECTION -->
-        <div class="form-section">
-            <h2>Client Management</h2>
+    <!-- FORM -->
+    <div class="form-section">
+        <h2>Client Management</h2>
 
-            <form method="POST">
+        <form method="POST">
 
-                <input type="text" name="name" placeholder="Name" required>
-                <input type="number" name="age" placeholder="Age">
-                <input type="number" step="0.1" name="weight" placeholder="Weight (kg)">
+            <input name="name" placeholder="Name" required>
+            <input name="age" placeholder="Age">
+            <input name="weight" placeholder="Weight">
 
-                <select name="program">
-                    {% for p in programs %}
-                    <option value="{{p}}">{{p}}</option>
-                    {% endfor %}
-                </select>
+            <select name="program">
+                {% for p in programs %}
+                <option value="{{p}}">{{p}}</option>
+                {% endfor %}
+            </select>
 
-                <label>Weekly Adherence (%)</label>
-                <input type="range" name="adherence" min="0" max="100">
+            <label>Adherence (%)</label>
+            <input type="range" name="adherence" min="0" max="100">
 
-                <div class="button-group">
-                    <button name="action" value="save">Save Client</button>
-                    <button name="action" value="load">Load Client</button>
-                    <button name="action" value="progress">Save Progress</button>
-                </div>
+            <div class="buttons">
+                <button name="action" value="save">Save</button>
+                <button name="action" value="load">Load</button>
+                <button name="action" value="progress">Save Progress</button>
+            </div>
 
-            </form>
-        </div>
+        </form>
+    </div>
 
-        <!-- RESULT SECTION -->
+    <!-- OUTPUT -->
+    <div class="result-section">
+
+        {% if message %}
+            <p class="success">{{message}}</p>
+        {% endif %}
+
         {% if result %}
-        <div class="result-section">
             <h2>Client Summary</h2>
-
-            {% if result.message %}
-                <p class="message">{{ result.message }}</p>
-            {% else %}
-                <p><strong>Name:</strong> {{result.name}}</p>
-                <p><strong>Age:</strong> {{result.age}}</p>
-                <p><strong>Weight:</strong> {{result.weight}} kg</p>
-                <p><strong>Program:</strong> {{result.program}}</p>
-                <p><strong>Calories:</strong> {{result.calories}} kcal/day</p>
-            {% endif %}
-        </div>
+            <p><b>Name:</b> {{result.name}}</p>
+            <p><b>Age:</b> {{result.age}}</p>
+            <p><b>Weight:</b> {{result.weight}}</p>
+            <p><b>Program:</b> {{result.program}}</p>
+            <p><b>Calories:</b> {{result.calories}}</p>
         {% endif %}
 
     </div>
+
+</div>
 
 </body>
 </html>
