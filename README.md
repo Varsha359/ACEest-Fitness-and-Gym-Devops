@@ -150,7 +150,7 @@ python run.py
 Open in browser:
 
 ```
-http://localhost:5000
+http://localhost:5001
 ```
 
 ---
@@ -177,7 +177,7 @@ docker build -t aceest-fitness:v3.2.4 .
 ### Run Container
 
 ```bash
-docker run -p 5000:5000 aceest-fitness:v3.2.4
+docker run -p 5001:5001 aceest-fitness:v3.2.4
 ```
 
 ---
@@ -244,7 +244,7 @@ git push origin feature/v3-final
 ### Port already in use
 
 ```bash
-lsof -i :5000
+lsof -i :5001
 kill -9 <PID>
 ```
 
