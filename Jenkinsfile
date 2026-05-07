@@ -85,7 +85,7 @@ pipeline {
                 do
                   RESPONSE=$(docker exec $STAGING_NAME python -c "import urllib.request; import sys; 
 try:
- print(urllib.request.urlopen('http://localhost:5000/health').read().decode())
+ print(urllib.request.urlopen('http://localhost:5001/health').read().decode())
 except:
  sys.exit(0)" || true)
 
