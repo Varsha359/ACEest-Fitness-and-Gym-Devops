@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aceest-a
+  labels:
+    app: aceest
+    variant: a
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: aceest
+      variant: a
+  template:
+    metadata:
+      labels:
+        app: aceest
+        variant: a
+    spec:
+      containers:
+        - name: aceest
+          image: aceest-fitness-api:variant-a
+          ports:
+            - containerPort: 5000
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aceest-b
+  labels:
+    app: aceest
+    variant: b
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: aceest
+      variant: b
+  template:
+    metadata:
+      labels:
+        app: aceest
+        variant: b
+    spec:
+      containers:
+        - name: aceest
+          image: aceest-fitness-api:variant-b
+          ports:
+            - containerPort: 5000
+
+# Use ingress rules or traffic-split (service mesh) to route percentage traffic to variant-a vs variant-b.

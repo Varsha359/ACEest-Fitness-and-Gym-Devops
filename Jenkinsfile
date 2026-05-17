@@ -59,6 +59,21 @@ pipeline {
             }
         }
 
+        stage('SonarQube Analysis') {
+            steps {
+                // This requires SonarQube to be configured in Jenkins with name 'SonarQube'
+                script {
+                    if (env.SONAR_HOST_URL) {
+                        withSonarQubeEnv('SonarQube') {
+                            sh 'sonar-scanner'
+                        }
+                    } else {
+                        echo 'SonarQube not configured - skipping analysis'
+                    }
+                }
+            }
+        }
+
         stage('Docker Build') {
             steps {
                 sh '''

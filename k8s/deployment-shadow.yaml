@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aceest-shadow
+  labels:
+    app: aceest
+    purpose: shadow
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: aceest
+      purpose: shadow
+  template:
+    metadata:
+      labels:
+        app: aceest
+        purpose: shadow
+    spec:
+      containers:
+        - name: aceest
+          image: aceest-fitness-api:shadow
+          ports:
+            - containerPort: 5000
+
+# Note: Shadow deployment receives mirrored traffic via service mesh (e.g., Istio) or special ingress rules.
