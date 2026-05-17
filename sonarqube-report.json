@@ -1,0 +1,56 @@
+{
+    "component": {
+        "key": "ACEest-Fitness",
+        "name": "ACEest Fitness and Gym",
+        "qualifier": "TRK",
+        "measures": [
+            {
+                "metric": "reliability_rating",
+                "value": "3.0",
+                "bestValue": false
+            },
+            {
+                "metric": "classes",
+                "value": "0"
+            },
+            {
+                "metric": "sqale_rating",
+                "value": "1.0",
+                "bestValue": true
+            },
+            {
+                "metric": "ncloc",
+                "value": "285"
+            },
+            {
+                "metric": "coverage",
+                "value": "0.0",
+                "bestValue": false
+            },
+            {
+                "metric": "critical_violations",
+                "value": "1",
+                "bestValue": false
+            },
+            {
+                "metric": "security_rating",
+                "value": "1.0",
+                "bestValue": true
+            },
+            {
+                "metric": "violations",
+                "value": "2",
+                "bestValue": false
+            },
+            {
+                "metric": "duplicated_lines_density",
+                "value": "0.0",
+                "bestValue": true
+            },
+            {
+                "metric": "functions",
+                "value": "14"
+            }
+        ]
+    }
+}

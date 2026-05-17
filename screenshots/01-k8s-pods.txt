@@ -1,0 +1,34 @@
+=== KUBERNETES PODS ===
+NAME                             READY   STATUS    RESTARTS      AGE   IP            NODE       NOMINATED NODE   READINESS GATES
+aceest-a-674c69f677-bp2q4        1/1     Running   2 (50m ago)   80m   10.244.0.53   minikube   <none>           <none>
+aceest-a-674c69f677-mzjbx        1/1     Running   2 (50m ago)   80m   10.244.0.63   minikube   <none>           <none>
+aceest-b-77d44f8b7-nh667         1/1     Running   2 (50m ago)   80m   10.244.0.64   minikube   <none>           <none>
+aceest-b-77d44f8b7-wr6f9         1/1     Running   2 (50m ago)   80m   10.244.0.60   minikube   <none>           <none>
+aceest-blue-79479d8cf8-54b6l     1/1     Running   2 (50m ago)   92m   10.244.0.52   minikube   <none>           <none>
+aceest-blue-79479d8cf8-xvntd     1/1     Running   2 (50m ago)   92m   10.244.0.50   minikube   <none>           <none>
+aceest-canary-86d6b6b8cc-lljk5   1/1     Running   2 (50m ago)   80m   10.244.0.48   minikube   <none>           <none>
+aceest-green-66c4f89985-fr9nh    1/1     Running   2 (50m ago)   92m   10.244.0.51   minikube   <none>           <none>
+aceest-green-66c4f89985-n5k4n    1/1     Running   2 (50m ago)   92m   10.244.0.58   minikube   <none>           <none>
+aceest-rolling-96848668c-6n6z4   1/1     Running   2 (50m ago)   80m   10.244.0.57   minikube   <none>           <none>
+aceest-rolling-96848668c-k627d   1/1     Running   2 (50m ago)   80m   10.244.0.54   minikube   <none>           <none>
+aceest-rolling-96848668c-pqljs   1/1     Running   2 (50m ago)   80m   10.244.0.62   minikube   <none>           <none>
+aceest-shadow-ff8d78bb6-rdw4s    1/1     Running   2 (50m ago)   80m   10.244.0.55   minikube   <none>           <none>
+aceest-stable-5b865fb6bf-2hgdr   1/1     Running   2 (50m ago)   80m   10.244.0.61   minikube   <none>           <none>
+aceest-stable-5b865fb6bf-58fjt   1/1     Running   2 (50m ago)   80m   10.244.0.59   minikube   <none>           <none>
+aceest-stable-5b865fb6bf-9xglw   1/1     Running   2 (50m ago)   80m   10.244.0.56   minikube   <none>           <none>
+
+=== KUBERNETES SERVICES ===
+NAME             TYPE        CLUSTER-IP    EXTERNAL-IP   PORT(S)   AGE
+aceest-service   ClusterIP   10.109.85.1   <none>        80/TCP    92m
+kubernetes       ClusterIP   10.96.0.1     <none>        443/TCP   93m
+
+=== DEPLOYMENT STATUS ===
+NAME             READY   UP-TO-DATE   AVAILABLE   AGE
+aceest-a         2/2     2            2           92m
+aceest-b         2/2     2            2           92m
+aceest-blue      2/2     2            2           92m
+aceest-canary    1/1     1            1           92m
+aceest-green     2/2     2            2           92m
+aceest-rolling   3/3     3            3           92m
+aceest-shadow    1/1     1            1           92m
+aceest-stable    3/3     3            3           92m

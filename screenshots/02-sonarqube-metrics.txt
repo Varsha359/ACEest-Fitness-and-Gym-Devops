@@ -1,0 +1,90 @@
+=== SONARQUBE CODE QUALITY METRICS ===
+{
+    "component": {
+        "key": "ACEest-Fitness",
+        "name": "ACEest Fitness and Gym",
+        "qualifier": "TRK",
+        "measures": [
+            {
+                "metric": "reliability_rating",
+                "value": "3.0",
+                "bestValue": false
+            },
+            {
+                "metric": "classes",
+                "value": "0"
+            },
+            {
+                "metric": "sqale_rating",
+                "value": "1.0",
+                "bestValue": true
+            },
+            {
+                "metric": "ncloc",
+                "value": "285"
+            },
+            {
+                "metric": "coverage",
+                "value": "0.0",
+                "bestValue": false
+            },
+            {
+                "metric": "critical_violations",
+                "value": "1",
+                "bestValue": false
+            },
+            {
+                "metric": "security_rating",
+                "value": "1.0",
+                "bestValue": true
+            },
+            {
+                "metric": "violations",
+                "value": "2",
+                "bestValue": false
+            },
+            {
+                "metric": "duplicated_lines_density",
+                "value": "0.0",
+                "bestValue": true
+            },
+            {
+                "metric": "functions",
+                "value": "14"
+            }
+        ]
+    }
+}
+
+
+=== UNIT TEST RESULTS ===
+============================= test session starts ==============================
+platform darwin -- Python 3.14.3, pytest-9.0.2, pluggy-1.6.0 -- /Users/varshagajula/Desktop/bits-pilani/semester3/ACEest-Fitness-and-Gym-Devops/venv/bin/python
+cachedir: .pytest_cache
+metadata: {'Python': '3.14.3', 'Platform': 'macOS-26.3.1-arm64-arm-64bit-Mach-O', 'Packages': {'pytest': '9.0.2', 'pluggy': '1.6.0'}, 'Plugins': {'metadata': '3.1.1', 'html': '4.2.0'}, 'JAVA_HOME': '/Library/Java/JavaVirtualMachines/jdk-24.jdk/Contents/Home'}
+rootdir: /Users/varshagajula/Desktop/bits-pilani/semester3/ACEest-Fitness-and-Gym-Devops
+plugins: metadata-3.1.1, html-4.2.0
+collecting ... collected 20 items
+
+tests/test_routes.py::test_health PASSED                                 [  5%]
+tests/test_routes.py::test_login_page_load PASSED                        [ 10%]
+tests/test_routes.py::test_login_success PASSED                          [ 15%]
+tests/test_routes.py::test_dashboard_requires_login PASSED               [ 20%]
+tests/test_routes.py::test_add_client PASSED                             [ 25%]
+tests/test_routes.py::test_add_client_empty_name PASSED                  [ 30%]
+tests/test_routes.py::test_progress_update PASSED                        [ 35%]
+tests/test_routes.py::test_chart_generation PASSED                       [ 40%]
+tests/test_routes.py::test_pdf_download PASSED                           [ 45%]
+tests/test_routes.py::test_logout PASSED                                 [ 50%]
+tests/test_services.py::test_init_db PASSED                              [ 55%]
+tests/test_services.py::test_validate_user PASSED                        [ 60%]
+tests/test_services.py::test_invalid_user PASSED                         [ 65%]
+tests/test_services.py::test_save_and_get_clients PASSED                 [ 70%]
+tests/test_services.py::test_save_client_empty PASSED                    [ 75%]
+tests/test_services.py::test_save_progress PASSED                        [ 80%]
+tests/test_services.py::test_generate_chart_no_data PASSED               [ 85%]
+tests/test_services.py::test_generate_chart_with_data PASSED             [ 90%]
+tests/test_services.py::test_generate_pdf PASSED                         [ 95%]
+tests/test_services.py::test_generate_pdf_empty_name PASSED              [100%]
+
+============================== 20 passed in 0.12s ==============================
